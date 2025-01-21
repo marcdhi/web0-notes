@@ -1,75 +1,69 @@
 ---
-source_url: https://doc.rust-lang.org/book/ch02-00-guessing-game-tutorial.html
-date_created: 2025-01-21T04:11:15.269Z
+source_url: https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html
+date_created: 2025-01-21T04:25:32.174Z
 ---
 
 # Notes: doc.rust-lang.org
 
-Here are comprehensive yet concise study notes on the Rust Guessing Game Tutorial:
+Here are concise yet comprehensive study notes on Variables and Mutability in Rust:
 
-## SUMMARY
-This tutorial introduces fundamental Rust concepts through building a guessing game. Users guess a secret random number (1-100), and the program provides feedback if the guess is too low or too high until the correct number is guessed.
+## Variables and Mutability
 
-## KEY CONCEPTS
-- **Variables and Mutability**: Defining immutable and mutable variables using `let` and `let mut`
-- **Data Types**: Primitive types like integers (`u32`) and strings (`String`)
-- **Functions**: Defining and calling functions like `main()`
-- **Crates and Modules**: Using external crates (libraries) like `rand` and importing modules
-- **Control Flow**: Looping with `loop`, `break`, and handling conditions with `match`
-- **Error Handling**: Using `Result` and pattern matching to handle potential errors
-- **Input/Output**: Reading user input with `io::stdin().read_line()` and printing to console
+### Immutable Variables
+- Variables are **immutable** by default
+- Cannot change value once bound to a name
+- Prevents bugs from changing values unexpectedly
 
-## DETAILED BREAKDOWN
-### 1. Setting up the Project
-- Create a new project with `cargo new guessing_game`
-- Build and run the starter "Hello, world!" program
+```rust
+let x = 5;
+x = 6; // Error: cannot assign twice to immutable variable
+```
 
-### 2. Processing a Guess
-- Print prompts for the user to enter a guess
-- Use `io::stdin().read_line(&mut guess)` to read user input into a mutable `String`
-- Handle potential errors with `expect()`
+### Mutable Variables
+- Use `mut` keyword to make variables **mutable**
+- Allows changing the value bound to the variable
 
-### 3. Generating a Secret Number
-- Add the `rand` crate as a dependency in `Cargo.toml`
-- Use `rand::thread_rng().gen_range(1..=100)` to generate a random secret number
+```rust
+let mut x = 5;
+x = 6; // Allowed: x is mutable
+```
 
-### 4. Comparing Guess to Secret Number
-- Convert the `String` guess to `u32` using `guess.trim().parse()`
-- Use `guess.cmp(&secret_number)` to compare the guess and secret number
-- Handle the comparison result with a `match` expression on the `Ordering` enum
+### Constants
+- Declared with `const` keyword
+- **Immutable** by nature
+- Type **must** be annotated
+- Set to **constant expression** (computed at compile-time)
+- Naming convention: **ALL_CAPS_WITH_UNDERSCORES**
 
-### 5. Allowing Multiple Guesses
-- Wrap the game logic in an infinite `loop`
-- Add a `break` to exit the loop when the guess is correct
+```rust
+const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
+```
 
-### 6. Handling Invalid Input
-- Use a `match` expression on the `parse()` result
-- For `Err(_)`, skip to the next iteration with `continue`
+### Shadowing
+- Introduce a new variable with the same name
+- New variable **shadows** the previous one
+- Allows changing the value and type of a variable
 
-## PRACTICAL APPLICATIONS
-- Game Development: Building simple games or simulations
-- Command-Line Interfaces: Accepting user input and providing feedback
-- Error Handling: Robust handling of potential errors and invalid inputs
-- External Libraries: Integrating external crates (libraries) into projects
+```rust
+let x = 5;
+let x = x + 1; // Shadows and rebinds x to 6
 
-## KEY TAKEAWAYS
-- Rust's ownership and type system ensure memory safety and prevent common bugs
-- Pattern matching with `match` expressions provides powerful control flow
-- Error handling is a first-class citizen in Rust, facilitated by the `Result` enum
-- Cargo makes it easy to import and manage external crates (libraries)
+{
+    let x = x * 2; // Inner scope, x is 12
+    println!("x is: {x}"); // Outputs 12
+}
 
-## RELATED TOPICS
-- **Variables and Mutability**: Covered in detail in Chapter 3
-- **Data Types**: Primitive types are covered in Chapter 3, and custom types like structs and enums are covered in Chapters 5 and 6
-- **Control Flow**: Additional control flow constructs like `if` expressions are covered in Chapter 3
-- **Error Handling**: More advanced error handling techniques are covered in Chapter 9
-- **Modules and Crates**: Managing growing projects with modules and crates is covered in Chapter 7
+println!("x is: {x}"); // Outputs 6 (outer scope)
+```
 
-## COMMON PITFALLS
-- Forgetting to handle potential errors, leading to panics
-- Mixing up immutable and mutable variables
-- Mismatched types when converting between different data types
-- Incorrectly importing or using external crates
+- Prevents accidentally reassigning an immutable variable
+- Avoids need for different names for variables of different types
+
+### Key Points
+- **Immutability** is the default for safety and easy concurrency
+- Use `mut` for mutability when needed
+- **Constants** are always immutable
+- **Shadowing** introduces a new variable, doesn't mutate existing one
 
 ---
 Generated by Web Notes AI
